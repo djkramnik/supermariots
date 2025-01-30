@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "http-server ."
+    "start": "http-server .",
+    "dev": "tsc --watch" 
   },
   "keywords": [],
   "author": "",
