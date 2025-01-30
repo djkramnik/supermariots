@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "es2015",
+    "strict": true,
+    "moduleResolution": "node10",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*.ts"],
+}
