@@ -1,4 +1,7 @@
+import SpriteSheet from "./sprite.js";
+
 ;(async function main() {
+  console.log('hi')
   const canvas = document.getElementById('screen') as HTMLCanvasElement
   if (!canvas) {
     console.error('cannot find canvas element')
@@ -10,10 +13,11 @@
     return
   }
 
-  context.fillRect(0,0,50,50)
-
   const tileAsset = await loadAsset({ name: 'tiles' })
-  context.drawImage(tileAsset, 0, 0)
+  console.log('hello!')
+  const sprites = new SpriteSheet(tileAsset, 16, 16)
+  sprites.define('ground', 0, 0)
+  sprites.draw('ground', context, 0, 0)
 
   function loadAsset({
     name,
