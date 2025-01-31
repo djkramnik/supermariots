@@ -37,7 +37,7 @@ class SpriteSheet {
   draw(name: string, context: CanvasRenderingContext2D, x: number, y: number) {
     const buffer = this.tiles.get(name)
     if (!buffer) {
-      console.error(`cannot draw tile ${name}; not found`)
+      console.error(`draw: tile '${name}' is not defined`)
       return
     }
     context.drawImage(buffer, x, y)

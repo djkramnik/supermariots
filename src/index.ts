@@ -45,7 +45,6 @@ function drawBackground({
 }) {
 
   const { tile, ranges } = background
-  console.log('background?', tile, ranges)
   for(const range of ranges) {
     const [xstart, xend, ystart, yend] = range
     for(let i = xstart; i < xend; i += 1) {
