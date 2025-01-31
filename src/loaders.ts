@@ -33,54 +33,35 @@ export async function loadLevel({
   return json as LevelDefinition
 }
 
-export async function loadBackgroundSprites({
-  asset,
+export async function loadStuff({
+  bgAsset,
+  charAsset,
   levelName,
-  canvas,
 }: {
-  asset: string
+  bgAsset: string | [string, string]
+  charAsset: string | [string, string]
   levelName: string
-  canvas: HTMLCanvasElement
-}): Promise<[SpriteSheet, LevelDefinition]> {
-
-  const context = canvas.getContext('2d')
-  if (!context) {
-    throw Error('could not create 2d context?!')
-  }
-  const [loadedAsset, level] = await Promise.all([
-    loadAsset({ name: asset }),
+}): Promise<[SpriteSheet, SpriteSheet, LevelDefinition]> {
+  const [loadedBgAsset, loadedCharsAsset, level] = await Promise.all([
+    loadAsset({ 
+      name: Array.isArray(bgAsset) ? bgAsset[0] : bgAsset,
+      extension: Array.isArray(bgAsset) ? bgAsset[1] : undefined,
+    }),
+    loadAsset({
+      name: Array.isArray(charAsset) ? charAsset[0] : charAsset,
+      extension: Array.isArray(charAsset) ? charAsset[1] : undefined,
+    }),
     loadLevel({ name: levelName })
   ])
-  const sprites = new SpriteSheet(loadedAsset, 16, 16)
-  sprites.define('ground', 0, 0)
-  sprites.define('sky', 3, 23)
-  for(const background of level.backgrounds) {
-    drawBackground({
-      background,
-      sprites,
-      context, 
-    })
-  }
-  return [sprites, level]
-}
 
-function drawBackground({
-  background,
-  context,
-  sprites,
-}: {
-  background: Background
-  context: CanvasRenderingContext2D
-  sprites: SpriteSheet
-}) {
+  // define bg sprites
+  const bgSprites = new SpriteSheet(loadedBgAsset, 16, 16)
+  bgSprites.defineTile('ground', 0, 0)
+  bgSprites.defineTile('sky', 3, 23)
 
-  const { tile, ranges } = background
-  for(const range of ranges) {
-    const [xstart, xend, ystart, yend] = range
-    for(let i = xstart; i < xend; i += 1) {
-      for(let j = ystart; j < yend; j += 1) {
-        sprites.drawTile(tile, context, i, j)
-      }
-    }
-  }
+  // define character sprites
+  const charSprites = new SpriteSheet(loadedCharsAsset, 16, 16)
+  charSprites.define('idle', 276, 44, 16, 16)
+
+  return [bgSprites, charSprites, level]
 }

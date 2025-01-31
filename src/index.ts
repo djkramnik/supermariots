@@ -1,4 +1,6 @@
-import { loadBackgroundSprites } from "./loaders.js";
+import { loadStuff } from "./loaders.js";
+import SpriteSheet from "./sprite.js";
+import { Background } from "./types.js";
 
 ;(async function main() {
   const canvas = document.getElementById('screen') as HTMLCanvasElement
@@ -6,10 +8,49 @@ import { loadBackgroundSprites } from "./loaders.js";
     console.error('Could not find canvas')
     return
   }
-  const [sprites, level] = await loadBackgroundSprites({
-    asset: 'tiles',
+  const context = canvas.getContext('2d')
+  if (!context) {
+    throw Error('could not create 2d context?!')
+  }
+
+  const [
+    bgSprites,
+    characterSprites,
+    level
+  ] = await loadStuff({
+    bgAsset: 'tiles',
+    charAsset: ['characters', '.gif'],
     levelName: '1-1',
-    canvas,
   })
+
+  for(const background of level.backgrounds) {
+    drawBackground({
+      background,
+      sprites: bgSprites,
+      context, 
+    })
+  }
+  characterSprites.draw('idle', context, 64, 64)
 })()
+
+function drawBackground({
+  background,
+  context,
+  sprites,
+}: {
+  background: Background
+  context: CanvasRenderingContext2D
+  sprites: SpriteSheet
+}) {
+
+  const { tile, ranges } = background
+  for(const range of ranges) {
+    const [xstart, xend, ystart, yend] = range
+    for(let i = xstart; i < xend; i += 1) {
+      for(let j = ystart; j < yend; j += 1) {
+        sprites.drawTile(tile, context, i, j)
+      }
+    }
+  }
+}
 

@@ -13,27 +13,47 @@ class SpriteSheet {
       this.height = height
       this.tiles = new Map()
   }
-  define(name: string, x: number, y: number) {
+  define(
+    name: string,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ) {
     const buffer = document.createElement('canvas')
-    buffer.width = this.width
-    buffer.height = this.height
+    buffer.width = width
+    buffer.height = height
     const ctx = buffer.getContext('2d')
     if (!ctx) {
       throw Error('spritesheet unable to create 2d canvas context')
     }
     ctx.drawImage(
       this.image,
+      x,
+      y,
+      width,
+      height,
+      0,
+      0,
+      width,
+      height,
+    )
+    this.tiles.set(name, buffer)
+  }
+  defineTile(
+    name: string,
+    x: number,
+    y: number
+  ) {
+    this.define(
+      name,
       x * this.width,
       y * this.height,
       this.width,
       this.height,
-      0,
-      0,
-      this.width,
-      this.height,
     )
-    this.tiles.set(name, buffer)
   }
+
   draw(name: string, context: CanvasRenderingContext2D, x: number, y: number) {
     const buffer = this.tiles.get(name)
     if (!buffer) {
