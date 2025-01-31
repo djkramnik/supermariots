@@ -42,6 +42,9 @@ class SpriteSheet {
     }
     context.drawImage(buffer, x, y)
   }
+  drawTile(name: string, context: CanvasRenderingContext2D, x: number, y: number) {
+    this.draw(name, context, x * this.width, y * this.height)
+  }
 }
 
 export default SpriteSheet
