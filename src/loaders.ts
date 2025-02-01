@@ -1,4 +1,5 @@
-import SpriteSheet from "./sprite.js"
+import { initSpriteSheet } from "./sprite.js"
+import SpriteSheet from "./spritesheet.js"
 import { LevelDefinition } from "./types.js"
 
 export function loadAsset({
@@ -51,13 +52,20 @@ export async function loadStuff({
   ])
 
   // define bg sprites
-  const bgSprites = new SpriteSheet(loadedBgAsset, 16, 16)
-  bgSprites.defineTile('ground', 0, 0)
-  bgSprites.defineTile('sky', 3, 23)
-
-  // define character sprites
-  const charSprites = new SpriteSheet(loadedCharsAsset, 16, 16)
-  charSprites.define('idle', 276, 44, 16, 16)
+  const bgSprites = initSpriteSheet({
+    asset: loadedBgAsset,
+    tiles: [
+      ['ground', 0, 0],
+      ['sky', 3, 23]
+    ]
+  })
+  
+  const charSprites = initSpriteSheet({
+    asset: loadedCharsAsset,
+    sprites: [
+      ['idle', 276, 44, 16, 16]
+    ]
+  })
 
   return [bgSprites, charSprites, level]
 }
