@@ -1,14 +1,12 @@
 import SpriteSheet from "./sprite.js"
-import { Background, LevelDefinition } from "./types.js"
+import { LevelDefinition } from "./types.js"
 
 export function loadAsset({
   name,
   basePath = '/assets',
-  extension = '.png',
 }: {
   name: string
   basePath?: string
-  extension?: string
 }): Promise<HTMLImageElement> {
   return new Promise(resolve => {
     const image = new Image()
@@ -16,7 +14,7 @@ export function loadAsset({
       image.removeEventListener('load', onLoaded)
       resolve(image)
     })
-    image.src = `${basePath}/${name.trim()}${extension}`
+    image.src = `${basePath}/${name.trim()}`
   })
 }
 
@@ -38,18 +36,16 @@ export async function loadStuff({
   charAsset,
   levelName,
 }: {
-  bgAsset: string | [string, string]
-  charAsset: string | [string, string]
+  bgAsset: string
+  charAsset: string
   levelName: string
 }): Promise<[SpriteSheet, SpriteSheet, LevelDefinition]> {
   const [loadedBgAsset, loadedCharsAsset, level] = await Promise.all([
     loadAsset({ 
-      name: Array.isArray(bgAsset) ? bgAsset[0] : bgAsset,
-      extension: Array.isArray(bgAsset) ? bgAsset[1] : undefined,
+      name: bgAsset,
     }),
     loadAsset({
-      name: Array.isArray(charAsset) ? charAsset[0] : charAsset,
-      extension: Array.isArray(charAsset) ? charAsset[1] : undefined,
+      name: charAsset,
     }),
     loadLevel({ name: levelName })
   ])

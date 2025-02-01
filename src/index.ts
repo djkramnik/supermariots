@@ -18,8 +18,8 @@ import { Background } from "./types.js";
     characterSprites,
     level
   ] = await loadStuff({
-    bgAsset: 'tiles',
-    charAsset: ['characters', '.gif'],
+    bgAsset: 'tiles.png',
+    charAsset: 'characters.gif',
     levelName: '1-1',
   })
 
