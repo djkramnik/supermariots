@@ -1,3 +1,4 @@
+import { drawBackground } from "./layer.js";
 import { loadStuff } from "./loaders.js";
 import SpriteSheet from "./spritesheet.js";
 import { Background } from "./types.js";
@@ -48,27 +49,3 @@ import { Background } from "./types.js";
   }
   
 })()
-
-
-
-function drawBackground({
-  background,
-  context,
-  sprites,
-}: {
-  background: Background
-  context: CanvasRenderingContext2D
-  sprites: SpriteSheet
-}) {
-
-  const { tile, ranges } = background
-  for(const range of ranges) {
-    const [xstart, xend, ystart, yend] = range
-    for(let i = xstart; i < xend; i += 1) {
-      for(let j = ystart; j < yend; j += 1) {
-        sprites.drawTile(tile, context, i, j)
-      }
-    }
-  }
-}
-
